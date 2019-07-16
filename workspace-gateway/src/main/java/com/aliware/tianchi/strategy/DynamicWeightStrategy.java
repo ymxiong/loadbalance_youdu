@@ -48,19 +48,13 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
     private static final int ACTIVE_LARGE_OLD = 42;
 
-    private static final int SMALL_INIT_WEIGHT = 200;
+    private static final int TOTAL_INIT_WEIGHT = 1500;
 
-    private static final int MEDIUM_INIT_WEIGHT = 450;
+    private int smallWeight = 500;
 
-    private static final int LARGE_INIT_WEIGHT = 650;
+    private int mediumWeight = 500;
 
-    private static final int TOTAL_INIT_WEIGHT = SMALL_INIT_WEIGHT + MEDIUM_INIT_WEIGHT + LARGE_INIT_WEIGHT;
-
-    private int smallWeight = SMALL_INIT_WEIGHT;
-
-    private int mediumWeight = MEDIUM_INIT_WEIGHT;
-
-    private int largeWeight = LARGE_INIT_WEIGHT;
+    private int largeWeight = 500;
 
     // 活跃门槛
     private static final int ALPHA_MAX = 40;
