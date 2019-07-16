@@ -63,9 +63,9 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
     private int largeWeight = LARGE_INIT_WEIGHT;
 
     // 活跃门槛
-    private static final int ALPHA_MAX = 80;
+    private static final int ALPHA_MAX = 50;
 
-    private static final int ALPHA_LOW = 10;
+    private static final int ALPHA_LOW = 1;
 
     // 权重抢占参数
     private static final int GRAB_NUM = (int) (TOTAL_INIT_WEIGHT * 0.04);
@@ -155,10 +155,12 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         int smallWeightLocal = this.smallWeight;
         int mediumWeightLocal = this.mediumWeight;
         int largeWeightLocal = this.largeWeight;
+        double smallRatio = smallWeightLocal / (double)largeWeightLocal;
+        double mediumRatio = mediumWeightLocal / (double)largeWeightLocal;
 
         // 低活跃门槛保护
-        smallWeightLocal = (int) (smallWeightLocal * ratioA(Constants.activeThreadCount.get("small"), ALPHA_MAX * smallWeightLocal / (double)largeWeightLocal, ALPHA_LOW* smallWeightLocal / (double)largeWeightLocal));
-        mediumWeightLocal = (int) (mediumWeightLocal * ratioA(Constants.activeThreadCount.get("medium"), ALPHA_MAX * mediumWeightLocal / (double)largeWeightLocal, ALPHA_LOW* mediumWeightLocal / (double)largeWeightLocal));
+        smallWeightLocal = (int) (smallWeightLocal * ratioA(Constants.activeThreadCount.get("small"), ALPHA_MAX * smallRatio, ALPHA_LOW * smallRatio));
+        mediumWeightLocal = (int) (mediumWeightLocal * ratioA(Constants.activeThreadCount.get("medium"), ALPHA_MAX * mediumRatio, ALPHA_LOW* mediumRatio));
         largeWeightLocal = (int) (largeWeightLocal * ratioA(Constants.activeThreadCount.get("large"), ALPHA_MAX , ALPHA_LOW));
 
 
@@ -195,11 +197,14 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         if (largeWeightLocal > BETA * GRAB_NUM) {
             grabTotal += GRAB_NUM;
         }
+        double avgSmall = Constants.activeThreadCount.get("small_period") / (double)Constants.activeThreadCount.get("small_period_num");
+        double avgMedium = Constants.activeThreadCount.get("medium_period") / (double)Constants.activeThreadCount.get("medium_period_num");
+        double avgLarge = Constants.activeThreadCount.get("large_period") / (double)Constants.activeThreadCount.get("large_period_num");
 
         // 分配权重
-        int totalActive = Constants.activeThreadCount.get("small") + Constants.activeThreadCount.get("medium") + Constants.activeThreadCount.get("large");
-        double smallRatio = Constants.activeThreadCount.get("small") / (double) totalActive;
-        double mediumRatio = Constants.activeThreadCount.get("medium") / (double) totalActive;
+        double totalActive = avgSmall + avgMedium + avgLarge;
+        double smallRatio = avgSmall / totalActive;
+        double mediumRatio = avgMedium / totalActive;
         smallWeightLocal = (int) (smallWeightLocal + grabTotal * smallRatio);
         mediumWeightLocal = (int) (mediumWeightLocal + grabTotal * mediumRatio);
         largeWeightLocal = TOTAL_INIT_WEIGHT - smallWeightLocal - mediumWeightLocal;
@@ -209,6 +214,12 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
             this.write(smallWeightLocal, mediumWeightLocal, largeWeightLocal);
         }
 
+        Constants.activeThreadCount.put("small_period", 0);
+        Constants.activeThreadCount.put("medium_period", 0);
+        Constants.activeThreadCount.put("large_period", 0);
+        Constants.activeThreadCount.put("small_period_num", 1);
+        Constants.activeThreadCount.put("medium_period_num", 1);
+        Constants.activeThreadCount.put("large_period_num", 1);
     }
 
 

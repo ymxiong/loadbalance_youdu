@@ -22,6 +22,14 @@ public class Constants {
         activeThreadCount.put("small", 200);
         activeThreadCount.put("medium", 450);
         activeThreadCount.put("large", 650);
+
+        // 区间活跃总量统计 用于计算窗口值
+        activeThreadCount.put("small_period", 0);
+        activeThreadCount.put("small_period_num", 1);
+        activeThreadCount.put("medium_period", 0);
+        activeThreadCount.put("medium_period_num", 0);
+        activeThreadCount.put("large_period", 0);
+        activeThreadCount.put("large_period_num", 0);
     }
 
 }

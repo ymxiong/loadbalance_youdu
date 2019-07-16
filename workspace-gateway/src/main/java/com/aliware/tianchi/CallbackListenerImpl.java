@@ -42,6 +42,8 @@ public class CallbackListenerImpl implements CallbackListener {
             receiveItemMap.put(data[0], new ReceiveItem(message, new Date()));
         }
         Constants.activeThreadCount.put(data[0] + "_old", data_old);
+        Constants.activeThreadCount.put(data[0] + "_period", Constants.activeThreadCount.get(data[0] + "_period") + Integer.parseInt(data[1]));
+        Constants.activeThreadCount.put(data[0] + "_period_num", Constants.activeThreadCount.get(data[0] + "_period_num") + 1);
         Constants.activeThreadCount.put(data[0], Integer.parseInt(data[1]));
     }
 
