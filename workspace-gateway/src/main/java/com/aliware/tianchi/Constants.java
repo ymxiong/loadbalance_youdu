@@ -15,21 +15,32 @@ public class Constants {
     public static LongAdder longAdderMedium = new LongAdder();
     public static LongAdder longAdderSmall = new LongAdder();
 
+    public static LongAdder smallTotalNum = new LongAdder();
+    public static LongAdder mediumTotalNum = new LongAdder();
+    public static LongAdder largeTotalNum = new LongAdder();
+
+
+
     static {
         longAdderLarge.add(650);
         longAdderMedium.add(450);
         longAdderSmall.add(200);
+        smallTotalNum.add(1);
+        mediumTotalNum.add(1);
+        largeTotalNum.add(1);
+
+
         activeThreadCount.put("small", 200);
         activeThreadCount.put("medium", 450);
         activeThreadCount.put("large", 650);
 
         // 区间活跃总量统计 用于计算窗口值
-        activeThreadCount.put("small_period", 0);
+        activeThreadCount.put("small_period", 1);
         activeThreadCount.put("small_period_num", 1);
-        activeThreadCount.put("medium_period", 0);
-        activeThreadCount.put("medium_period_num", 0);
-        activeThreadCount.put("large_period", 0);
-        activeThreadCount.put("large_period_num", 0);
+        activeThreadCount.put("medium_period", 1);
+        activeThreadCount.put("medium_period_num", 1);
+        activeThreadCount.put("large_period", 1);
+        activeThreadCount.put("large_period_num", 1);
     }
 
 }

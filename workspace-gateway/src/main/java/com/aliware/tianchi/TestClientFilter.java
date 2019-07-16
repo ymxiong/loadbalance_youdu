@@ -8,7 +8,7 @@ import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.*;
 
-import java.util.Date;
+import java.util.*;
 
 import static com.aliware.tianchi.Constants.*;
 
@@ -56,11 +56,31 @@ public class TestClientFilter implements Filter {
         int port = url.getPort();
         if (port == 20880) {
             longAdderSmall.increment();
+            smallTotalNum.increment();
         } else if (port == 20870) {
             longAdderMedium.increment();
+            mediumTotalNum.increment();
         } else {
             longAdderLarge.increment();
+            largeTotalNum.increment();
         }
         return result;
     }
+
+
+    private static final boolean IS_DEBUG = Boolean.parseBoolean(System.getProperty("debug"));
+
+    public TestClientFilter() {
+        if (IS_DEBUG) {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                public void run() {
+                    System.err.println(new ReceiveItem("small left num: " + longAdderSmall.intValue() + " total: " + smallTotalNum.intValue(), new Date()));
+                    System.err.println(new ReceiveItem("medium left num: " + longAdderMedium.intValue() + " total: " + mediumTotalNum.intValue(), new Date()));
+                    System.err.println(new ReceiveItem("large left num: " + longAdderLarge.intValue() + " total: " + largeTotalNum.intValue(), new Date()));
+                }
+            }, 500, 500);
+        }
+    }
+
 }
