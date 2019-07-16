@@ -4,10 +4,9 @@ import com.aliware.tianchi.Constants;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.rpc.Invocation;
 
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+
+import static com.aliware.tianchi.strategy.AbstractStrategy.rand;
 
 /**
  * Author: eamon
@@ -48,7 +47,7 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
     private static final int ACTIVE_LARGE_OLD = 42;
 
-    private static final int TOTAL_INIT_WEIGHT = 1500;
+    private static final int TOTAL_INIT_WEIGHT = 30000;
 
     private int smallWeight = TOTAL_INIT_WEIGHT / 3;
 
@@ -62,10 +61,10 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
     private static final int ALPHA_LOW = 1;
 
     // 权重抢占参数
-    private static final int GRAB_NUM = (int) (TOTAL_INIT_WEIGHT * 0.03);
+    private static final int GRAB_NUM = 20;
 
     // 权重调整滑动窗口时间 单位毫秒
-    private static final int SLIDING_WINDOW_TIME = 100;
+    private static final int SLIDING_WINDOW_TIME = 10;
 
     private HashMap<Integer, Integer> numberMap = new HashMap<>();
 
@@ -95,24 +94,24 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
 
-                if (IS_DEBUG) {
-                    numberMap.put(NUM_TOTAL, numberMap.get(NUM_SMALL) + numberMap.get(NUM_MEDIUM) + numberMap.get(NUM_LARGE));
-                    System.out.println(
-                            " NUM_SMALL: " + numberMap.get(NUM_SMALL) +
-                                    " NUM_MEDIUM: " + numberMap.get(NUM_MEDIUM) +
-                                    " NUM_LARGE: " + numberMap.get(NUM_LARGE) +
-                                    " NUM_TOTAL: " + numberMap.get(NUM_TOTAL) +
-                                    " D_SMALL: " + (numberMap.get(NUM_SMALL) - numberMap.get(NUM_SMALL_OLD)) +
-                                    " D_MEDIUM: " + (numberMap.get(NUM_MEDIUM) - numberMap.get(NUM_MEDIUM_OLD)) +
-                                    " D_LARGE: " + (numberMap.get(NUM_LARGE) - numberMap.get(NUM_LARGE_OLD)) +
-                                    " D_TOTAL: " + (numberMap.get(NUM_TOTAL) - numberMap.get(NUM_TOTAL_OLD))
-                    );
-                    System.out.println("GRAB_NUM: " + GRAB_NUM + " SMALL_WEIGHT: " + smallWeight + " MEDIUM_WEIGHT: " + mediumWeight + " LARGE_WEIGHT: " + largeWeight);
-                    numberMap.put(NUM_SMALL_OLD, numberMap.get(NUM_SMALL));
-                    numberMap.put(NUM_MEDIUM_OLD, numberMap.get(NUM_MEDIUM));
-                    numberMap.put(NUM_LARGE_OLD, numberMap.get(NUM_LARGE));
-                    numberMap.put(NUM_TOTAL_OLD, numberMap.get(NUM_TOTAL));
-                }
+//                if (IS_DEBUG) {
+//                    numberMap.put(NUM_TOTAL, numberMap.get(NUM_SMALL) + numberMap.get(NUM_MEDIUM) + numberMap.get(NUM_LARGE));
+//                    System.out.println(
+//                            " NUM_SMALL: " + numberMap.get(NUM_SMALL) +
+//                                    " NUM_MEDIUM: " + numberMap.get(NUM_MEDIUM) +
+//                                    " NUM_LARGE: " + numberMap.get(NUM_LARGE) +
+//                                    " NUM_TOTAL: " + numberMap.get(NUM_TOTAL) +
+//                                    " D_SMALL: " + (numberMap.get(NUM_SMALL) - numberMap.get(NUM_SMALL_OLD)) +
+//                                    " D_MEDIUM: " + (numberMap.get(NUM_MEDIUM) - numberMap.get(NUM_MEDIUM_OLD)) +
+//                                    " D_LARGE: " + (numberMap.get(NUM_LARGE) - numberMap.get(NUM_LARGE_OLD)) +
+//                                    " D_TOTAL: " + (numberMap.get(NUM_TOTAL) - numberMap.get(NUM_TOTAL_OLD))
+//                    );
+//                    System.out.println("GRAB_NUM: " + GRAB_NUM + " SMALL_WEIGHT: " + smallWeight + " MEDIUM_WEIGHT: " + mediumWeight + " LARGE_WEIGHT: " + largeWeight);
+//                    numberMap.put(NUM_SMALL_OLD, numberMap.get(NUM_SMALL));
+//                    numberMap.put(NUM_MEDIUM_OLD, numberMap.get(NUM_MEDIUM));
+//                    numberMap.put(NUM_LARGE_OLD, numberMap.get(NUM_LARGE));
+//                    numberMap.put(NUM_TOTAL_OLD, numberMap.get(NUM_TOTAL));
+//                }
 
                 weightChange();
 
@@ -161,6 +160,24 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         smallWeightLocal = (int) (smallWeightLocal * ratioA(leftSmall, ALPHA_MAX * smallRatio, ALPHA_LOW * smallRatio));
         mediumWeightLocal = (int) (mediumWeightLocal * ratioA(leftMedium, ALPHA_MAX * mediumRatio, ALPHA_LOW * mediumRatio));
         largeWeightLocal = (int) (largeWeightLocal * ratioA(leftLarge, ALPHA_MAX, ALPHA_LOW));
+
+//        PriorityQueue<Double> queue = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
+//        double k1 = Math.log(rand.nextDouble()) / smallWeightLocal;
+//        queue.offer(k1);
+//        double k2 = Math.log(rand.nextDouble()) / mediumWeightLocal;
+//        queue.offer(k2);
+//        double k3 = Math.log(rand.nextDouble()) / largeWeightLocal;
+//        queue.offer(k3);
+//
+//        double result = queue.poll();
+//
+//        if (result == k1) {
+//            return 0;
+//        }
+//        if (result == k2) {
+//            return 1;
+//        }
+//        return 2;
 
 
         int targetMachine = 2;
