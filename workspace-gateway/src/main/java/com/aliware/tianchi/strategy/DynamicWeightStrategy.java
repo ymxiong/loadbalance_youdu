@@ -50,11 +50,11 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
     private static final int TOTAL_INIT_WEIGHT = 1500;
 
-    private int smallWeight = 500;
+    private int smallWeight = TOTAL_INIT_WEIGHT / 3;
 
-    private int mediumWeight = 500;
+    private int mediumWeight = TOTAL_INIT_WEIGHT / 3;
 
-    private int largeWeight = 500;
+    private int largeWeight = TOTAL_INIT_WEIGHT / 3;
 
     // 活跃门槛
     private static final int ALPHA_MAX = 40;
@@ -202,7 +202,7 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         double avgLarge = Constants.longAdderLarge.intValue();
 
         // 分配权重
-        double k1 = avgSmall * largeWeightLocal / smallWeightLocal ;
+        double k1 = avgSmall * largeWeightLocal / smallWeightLocal;
         double k2 = avgMedium * largeWeightLocal / mediumWeightLocal;
 
         // 按照压比分配权重 最终双方逼近一个值
