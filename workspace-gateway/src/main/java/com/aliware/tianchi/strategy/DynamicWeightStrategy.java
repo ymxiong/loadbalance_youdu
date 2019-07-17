@@ -96,17 +96,17 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
                 numberMap.put(NUM_TOTAL, numberMap.get(NUM_SMALL) + numberMap.get(NUM_MEDIUM) + numberMap.get(NUM_LARGE));
 
-                System.out.println(
-                        " NUM_SMALL: " + numberMap.get(NUM_SMALL) +
-                                " NUM_MEDIUM: " + numberMap.get(NUM_MEDIUM) +
-                                " NUM_LARGE: " + numberMap.get(NUM_LARGE) +
-                                " NUM_TOTAL: " + numberMap.get(NUM_TOTAL) +
-                                " D_SMALL: " + (numberMap.get(NUM_SMALL) - numberMap.get(NUM_SMALL_OLD)) +
-                                " D_MEDIUM: " + (numberMap.get(NUM_MEDIUM) - numberMap.get(NUM_MEDIUM_OLD)) +
-                                " D_LARGE: " + (numberMap.get(NUM_LARGE) - numberMap.get(NUM_LARGE_OLD)) +
-                                " D_TOTAL: " + (numberMap.get(NUM_TOTAL) - numberMap.get(NUM_TOTAL_OLD))
-                );
-                System.out.println("GRAB_NUM: " + GRAB_NUM + " SMALL_WEIGHT: " + smallWeight + " MEDIUM_WEIGHT: " + mediumWeight + " LARGE_WEIGHT: " + largeWeight);
+//                System.out.println(
+//                        " NUM_SMALL: " + numberMap.get(NUM_SMALL) +
+//                                " NUM_MEDIUM: " + numberMap.get(NUM_MEDIUM) +
+//                                " NUM_LARGE: " + numberMap.get(NUM_LARGE) +
+//                                " NUM_TOTAL: " + numberMap.get(NUM_TOTAL) +
+//                                " D_SMALL: " + (numberMap.get(NUM_SMALL) - numberMap.get(NUM_SMALL_OLD)) +
+//                                " D_MEDIUM: " + (numberMap.get(NUM_MEDIUM) - numberMap.get(NUM_MEDIUM_OLD)) +
+//                                " D_LARGE: " + (numberMap.get(NUM_LARGE) - numberMap.get(NUM_LARGE_OLD)) +
+//                                " D_TOTAL: " + (numberMap.get(NUM_TOTAL) - numberMap.get(NUM_TOTAL_OLD))
+//                );
+//                System.out.println("GRAB_NUM: " + GRAB_NUM + " SMALL_WEIGHT: " + smallWeight + " MEDIUM_WEIGHT: " + mediumWeight + " LARGE_WEIGHT: " + largeWeight);
 
                 weightChange();
 
