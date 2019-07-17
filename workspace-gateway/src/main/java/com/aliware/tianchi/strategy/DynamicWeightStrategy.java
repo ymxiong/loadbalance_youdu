@@ -70,6 +70,12 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
     private static final boolean IS_DEBUG = Boolean.parseBoolean(System.getProperty("debug"));
 
+    private static int weight_A = 0;
+
+    private static int weight_B = 0;
+
+    private static int weight_C = 0;
+
     private DynamicWeightStrategy() {
         numberMap.put(NUM_SMALL, 0);
         numberMap.put(NUM_MEDIUM, 0);
@@ -107,9 +113,10 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 //                                    " D_TOTAL: " + (numberMap.get(NUM_TOTAL) - numberMap.get(NUM_TOTAL_OLD))
 //                    );
 //                    System.out.println("GRAB_NUM: " + GRAB_NUM + " SMALL_WEIGHT: " + smallWeight + " MEDIUM_WEIGHT: " + mediumWeight + " LARGE_WEIGHT: " + largeWeight);
-//                    numberMap.put(NUM_SMALL_OLD, numberMap.get(NUM_SMALL));
-//                    numberMap.put(NUM_MEDIUM_OLD, numberMap.get(NUM_MEDIUM));
-//                    numberMap.put(NUM_LARGE_OLD, numberMap.get(NUM_LARGE));
+
+                numberMap.put(NUM_SMALL_OLD, numberMap.get(NUM_SMALL));
+                numberMap.put(NUM_MEDIUM_OLD, numberMap.get(NUM_MEDIUM));
+                numberMap.put(NUM_LARGE_OLD, numberMap.get(NUM_LARGE));
 //                    numberMap.put(NUM_TOTAL_OLD, numberMap.get(NUM_TOTAL));
 //                }
 
@@ -181,7 +188,6 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
 
 
         int targetMachine = 2;
-        Random rand = new Random();
         int randNumber = rand.nextInt(smallWeightLocal + mediumWeightLocal + largeWeightLocal);
         if (randNumber < smallWeightLocal) {
             targetMachine = 0;
