@@ -5,42 +5,30 @@ import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
 
 public class Constants {
-//    public static final ThreadLocal<Integer>  threadLocal = new ThreadLocal();
-/*    public static  Integer threadSmall = 0;
-    public static  Integer threadMedium = 0;
-    public static  Integer threadLarge = 0;*/
 
+    //服务端-获取剩余线程数
     public static Map<String, Integer> activeThreadCount = new HashMap<>();
+
+    //客户端-获取剩余线程数
     public static LongAdder longAdderLarge = new LongAdder();
     public static LongAdder longAdderMedium = new LongAdder();
     public static LongAdder longAdderSmall = new LongAdder();
 
-    public static LongAdder smallTotalNum = new LongAdder();
-    public static LongAdder mediumTotalNum = new LongAdder();
-    public static LongAdder largeTotalNum = new LongAdder();
+    //初始总线程数是否初始化
+    public static Boolean threadCountInit = false;
 
-
+    //初始总线程数
+    public static int smallProducerThreadSum = 0;
+    public static int mediumProducerThreadSum = 0;
+    public static int largeProducerThreadSum = 0;
 
     static {
-        longAdderLarge.add(650);
-        longAdderMedium.add(450);
-        longAdderSmall.add(200);
-        smallTotalNum.add(1);
-        mediumTotalNum.add(1);
-        largeTotalNum.add(1);
-
-
-        activeThreadCount.put("small", 200);
-        activeThreadCount.put("medium", 450);
-        activeThreadCount.put("large", 650);
-
-        // 区间活跃总量统计 用于计算窗口值
-        activeThreadCount.put("small_period", 1);
-        activeThreadCount.put("small_period_num", 1);
-        activeThreadCount.put("medium_period", 1);
-        activeThreadCount.put("medium_period_num", 1);
-        activeThreadCount.put("large_period", 1);
-        activeThreadCount.put("large_period_num", 1);
+        longAdderLarge.add(0);
+        longAdderMedium.add(0);
+        longAdderSmall.add(0);
+        activeThreadCount.put("small", 0);
+        activeThreadCount.put("medium", 0);
+        activeThreadCount.put("large", 0);
     }
 
 }

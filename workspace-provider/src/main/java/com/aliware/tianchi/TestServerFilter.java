@@ -1,7 +1,6 @@
 package com.aliware.tianchi;
 
 import org.apache.dubbo.common.Constants;
-import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.Filter;
 import org.apache.dubbo.rpc.Invocation;
@@ -35,19 +34,19 @@ public class TestServerFilter implements Filter {
 
     @Override
     public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
-        if(!init){
-            URL url=invoker.getUrl();
-            int port = url.getPort();
-            int total=url.getParameter("threads",0);
-            if (port==20880){
-                com.aliware.tianchi.Constants.threadSmallTotal=total;
-            }else if(port==20870){
-                com.aliware.tianchi.Constants.threadMediumTotal=total;
-            }else {
-                com.aliware.tianchi.Constants.threadLargeTotal=total;
-            }
-            init=true;
-        }
+//        if(!init){
+//            URL url=invoker.getUrl();
+//            int port = url.getPort();
+//            int total=url.getParameter("threads",0);
+//            if (port==20880){
+//                com.aliware.tianchi.Constants.threadSmallTotal=total;
+//            }else if(port==20870){
+//                com.aliware.tianchi.Constants.threadMediumTotal=total;
+//            }else {
+//                com.aliware.tianchi.Constants.threadLargeTotal=total;
+//            }
+//            init=true;
+//        }
         return result;
     }
 

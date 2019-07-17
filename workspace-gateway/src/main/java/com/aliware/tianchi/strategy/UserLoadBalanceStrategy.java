@@ -2,9 +2,6 @@ package com.aliware.tianchi.strategy;
 
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-
-import java.util.List;
 
 /**
  * Author: eamon
@@ -14,7 +11,5 @@ import java.util.List;
 public interface UserLoadBalanceStrategy {
 
     int select(URL url, Invocation invocation);
-
-
 
 }

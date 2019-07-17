@@ -2,24 +2,11 @@ package com.aliware.tianchi;
 
 import org.apache.dubbo.rpc.listener.CallbackListener;
 
-import static com.aliware.tianchi.Constants.*;
-
-/**
- * @author daofeng.xjf
- * <p>
- * 客户端监听器
- * 可选接口
- * 用户可以基于获取获取服务端的推送信息，与 CallbackService 搭配使用
- */
-public class CallbackListenerImpl implements CallbackListener {
-
-    public CallbackListenerImpl() {
-    }
-
-
+public class CallbackListenerForSum implements CallbackListener {
     @Override
     public void receiveServerMsg(String msg) {
-        if (threadCountInit)
+        //System.out.println("CallbackListenerForSum接受到数据："+ msg);
+        /*if (threadCountInit)
             return;
         synchronized (this) {
             if (threadCountInit) return;
@@ -47,8 +34,10 @@ public class CallbackListenerImpl implements CallbackListener {
 
                 //线程参数初始化(直接在gateway统计)
                 threadCountInit = true;
-            }
-        }
+
+                //System.out.println("threadCountInit = true");
+            }*/
+//        }
 
     }
 }
