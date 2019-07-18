@@ -161,33 +161,36 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         mediumWeightLocal = (int) (mediumWeightLocal * ratioA(leftMedium, ALPHA_MAX * mediumRatio, ALPHA_LOW * mediumRatio));
         largeWeightLocal = (int) (largeWeightLocal * ratioA(leftLarge, ALPHA_MAX, ALPHA_LOW));
 
-//        PriorityQueue<Double> queue = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
-//        double k1 = Math.log(rand.nextDouble()) / smallWeightLocal;
-//        queue.offer(k1);
-//        double k2 = Math.log(rand.nextDouble()) / mediumWeightLocal;
-//        queue.offer(k2);
-//        double k3 = Math.log(rand.nextDouble()) / largeWeightLocal;
-//        queue.offer(k3);
-//
-//        double result = queue.poll();
-//
-//        if (result == k1) {
-//            return 0;
-//        }
-//        if (result == k2) {
-//            return 1;
-//        }
-//        return 2;
+        double alpha = 3.5;
+        double beta = 6.5;
 
+        PriorityQueue<Double> queue = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
+        double k1 = Math.log(rand.nextDouble()) / (alpha * smallWeightLocal + beta * leftSmall);
+        queue.offer(k1);
+        double k2 = Math.log(rand.nextDouble()) / (alpha * mediumWeightLocal + beta * leftMedium);
+        queue.offer(k2);
+        double k3 = Math.log(rand.nextDouble()) / (alpha * largeWeightLocal + beta * leftLarge);
+        queue.offer(k3);
 
-        int targetMachine = 2;
-        int randNumber = rand.nextInt(smallWeightLocal + mediumWeightLocal + largeWeightLocal);
-        if (randNumber < smallWeightLocal) {
-            targetMachine = 0;
-        } else if (randNumber < smallWeightLocal + mediumWeightLocal) {
-            targetMachine = 1;
+        double result = queue.poll();
+
+        if (result == k1) {
+            return 0;
         }
-        return targetMachine;
+        if (result == k2) {
+            return 1;
+        }
+        return 2;
+
+
+//        int targetMachine = 2;
+//        int randNumber = rand.nextInt(smallWeightLocal + mediumWeightLocal + largeWeightLocal);
+//        if (randNumber < smallWeightLocal) {
+//            targetMachine = 0;
+//        } else if (randNumber < smallWeightLocal + mediumWeightLocal) {
+//            targetMachine = 1;
+//        }
+//        return targetMachine;
     }
 
 
@@ -223,7 +226,6 @@ public class DynamicWeightStrategy implements UserLoadBalanceStrategy {
         double avgSmall = alpha * (numberMap.get(NUM_SMALL) - numberMap.get(NUM_SMALL_OLD)) + beta * Constants.longAdderSmall.intValue();
         double avgMedium = alpha * (numberMap.get(NUM_MEDIUM) - numberMap.get(NUM_MEDIUM_OLD)) + beta * Constants.longAdderMedium.intValue();
         double avgLarge = alpha * (numberMap.get(NUM_LARGE) - numberMap.get(NUM_LARGE_OLD)) + beta * Constants.longAdderLarge.intValue();
-
 
 
         // 分配权重
